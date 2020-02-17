@@ -1,5 +1,8 @@
 #!/bin/bash
 #  ./build.sh 1 to clean build before make
+work_path=$(dirname $(readlink -f $0))
+code_path=/home/ubuntu/rec
+
 if [ -n "$1" ]; then
     clean_flag=$1
 else
@@ -12,15 +15,15 @@ export OF_DISABLE_MIUI_SPECIFIC_FEATURES="1"    # Remove MIUI staff
 export TW_DEVICE_VERSION="R10.1"
 export BUILD_TYPE="Beta"
 
-# build
-cd /home/ubuntu/rec
+# source directory
+cd $code_path
 
 # prepare modifed AromaFM.zip modify
 # backup origin AromaFM.zip
 if [ ! -f "vendor/recovery/FoxFiles/AromaFM/AromaFM-b.zip" ]; then  # last time build failed.
     echo "backup and replace AromaFM.zip to support Chinese"
     cp vendor/recovery/FoxFiles/AromaFM/AromaFM.zip vendor/recovery/FoxFiles/AromaFM/AromaFM-b.zip
-    cp /home/ubuntu/AromaFM.zip vendor/recovery/FoxFiles/AromaFM/AromaFM.zip
+    cp $work_path/AromaFM.zip vendor/recovery/FoxFiles/AromaFM/AromaFM.zip
 fi
 
 source build/envsetup.sh
@@ -35,7 +38,7 @@ make recoveryimage
 echo "restore origin AromaFM.zip"
 mv vendor/recovery/FoxFiles/AromaFM/AromaFM-b.zip vendor/recovery/FoxFiles/AromaFM/AromaFM.zip
 
-if [ -f "nohup.out" ]; then  # copy log
-    cp nohup.out $(date "+%Y-%m-%d-%H-%M-%S").log
-    rm nohup.out
+if [ -f "$work_path/nohup.out" ]; then  # copy log
+    cp $work_path/nohup.out $work_path/$(date "+%Y-%m-%d-%H-%M-%S").log
+    rm $work_path/nohup.out
 fi
