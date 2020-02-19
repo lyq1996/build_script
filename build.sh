@@ -1,5 +1,7 @@
 #!/bin/bash
 #  ./build.sh 1 to make clean before make
+serverchan_enable="1"	    # Enable ServerChan
+serverchan_sckey=""		    # ServerChan api key
 work_path=$(dirname $(readlink -f $0))
 code_path=/home/ubuntu/rec
 tree_path=/home/ubuntu/android_device_oneplus_dumpling
@@ -51,6 +53,11 @@ mv vendor/recovery/FoxFiles/AromaFM/AromaFM-b.zip vendor/recovery/FoxFiles/Aroma
 rm -rf device/oneplus
 
 if [ -f "$work_path/nohup.out" ]; then  # copy log
-    cp $work_path/nohup.out $work_path/$(date "+%Y-%m-%d-%H-%M-%S").log
+    log_path=$work_path/$(date "+%Y-%m-%d-%H-%M-%S").log
+    cp $work_path/nohup.out $log_path
     rm $work_path/nohup.out
+fi
+
+if [ "$serverchan_enable" = "1" ]; then
+    curl -s "http://sc.ftqq.com/$serverchan_sckey.send?text=编译TWRP完成啦" -d "&desp=log:${log_path}" &
 fi
