@@ -13,10 +13,12 @@ else
 fi
 
 # export OrangeFox flags
+export ALLOW_MISSING_DEPENDENCIES=true
 export OF_ALLOW_DISABLE_NAVBAR="0"
 export OF_DISABLE_MIUI_SPECIFIC_FEATURES="1"    # Remove MIUI staff
-export TW_DEVICE_VERSION="R10.1"
+export TW_DEVICE_VERSION="R10.1_1"
 export BUILD_TYPE="Beta"
+export FOX_USE_NANO_EDITOR="1"
 
 # source directory
 cd $code_path
@@ -33,7 +35,7 @@ cp -r $tree_path device/oneplus/dumpling
 # backup origin AromaFM.zip
 if [ ! -f "vendor/recovery/FoxFiles/AromaFM/AromaFM-b.zip" ]; then  # if build canceled.
     echo "backup and replace AromaFM.zip to support Chinese"
-    cp vendor/recovery/FoxFiles/AromaFM/AromaFM.zip vendor/recovery/FoxFiles/AromaFM/AromaFM-b.zip
+    cp vendor/recovery/FoxFiles/AromaFM/AromaFM.zip ~/AromaFM-b.zip
     cp $work_path/AromaFM.zip vendor/recovery/FoxFiles/AromaFM/AromaFM.zip
 fi
 
@@ -47,7 +49,7 @@ make recoveryimage
 
 # restore origin AromaFM.zip
 echo "restore origin AromaFM.zip"
-mv vendor/recovery/FoxFiles/AromaFM/AromaFM-b.zip vendor/recovery/FoxFiles/AromaFM/AromaFM.zip
+mv ~/AromaFM-b.zip vendor/recovery/FoxFiles/AromaFM/AromaFM.zip
 
 # remove tree
 rm -rf device/oneplus
